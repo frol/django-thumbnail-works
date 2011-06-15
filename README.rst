@@ -1,6 +1,8 @@
 django-thumbnail-works
 ========================================================================
 
+NOTICE: This is fork of orginal project
+
 | **Author**: `George Notaras <http://www.g-loaded.eu/>`_
 | **Development Web Site**: `django-thumbnail-works project <http://www.codetrax.org/projects/django-thumbnail-works>`_
 | **Source Code Repository**: `django-thumbnail-works source code <https://source.codetrax.org/hgroot/django-thumbnail-works>`_
