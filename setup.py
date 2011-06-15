@@ -67,7 +67,7 @@ if __name__=='__main__':
         maintainer_email = 'gnot [at] g-loaded.eu',
         url = 'http://www.codetrax.org/projects/django-thumbnail-works',
         description = 'django-thumbnail-works adds thumbnail support to the default ImageField.',
-        long_description = read('README'),
+        long_description = read('README.rst'),
         download_url = 'https://source.codetrax.org/hgroot/django-thumbnail-works',
         platforms=['any'],
         classifiers = [
