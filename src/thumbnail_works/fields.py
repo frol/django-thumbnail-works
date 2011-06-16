@@ -208,13 +208,6 @@ class BaseEnhancedImageFieldFile(ImageFieldFile):
         # Among others, also sets ``self.name``
         super(BaseEnhancedImageFieldFile, self).__init__(instance, field, name)
         
-        # Set thumbnail objects as attributes.
-        if self._verify_thumbnail_requirements():
-            for identifier, proc_opts in self.field.thumbnails.items():
-                t = ThumbnailFieldFile(self.instance, self.field, self, self.name, identifier, proc_opts)
-                if self.storage.exists(smart_unicode(t.name)):
-                    setattr(self, identifier, t)
-    
     def _verify_thumbnail_requirements(self):
         """This function performs a series of checks to ensure flawless
         thumbnail access, generation and management. It is a safety mechanism.
@@ -261,12 +254,15 @@ class BaseEnhancedImageFieldFile(ImageFieldFile):
             # Proceed to thumbnail generation only if a *thumbnail* attribute
             # is requested
             if self.field.thumbnails.has_key(attribute):
-                # Generate thumbnail
+                # Check thumbnail exists and generate it if need
                 self._require_file()    # TODO: document this
                 if self._verify_thumbnail_requirements():
                     proc_opts = self.field.thumbnails[attribute]
                     t = ThumbnailFieldFile(self.instance, self.field, self, self.name, attribute, proc_opts)
-                    t.save()
+                    if self.storage.exists(smart_unicode(t.name)):
+                        setattr(self, attribute, t)
+                    else:
+                        t.save()
                     assert self.__dict__[attribute] == t, \
                         Exception('Thumbnail attribute `%s` not set' % attribute)
         return self.__dict__[attribute]
