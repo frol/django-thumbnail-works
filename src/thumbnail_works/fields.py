@@ -29,6 +29,7 @@ from django.utils.encoding import smart_unicode
 
 from thumbnail_works.exceptions import ThumbnailOptionError
 from thumbnail_works.exceptions import ThumbnailWorksError
+from thumbnail_works.exceptions import NoAccessToImage
 from thumbnail_works import settings
 from thumbnail_works.images import ImageProcessor
 
@@ -97,14 +98,17 @@ class BaseThumbnailFieldFile(ImageFieldFile):
         source image's ImageFieldFile.
         
         """
-        if source_content is None:
-            source_content = self.source.get_image_content()
-            
-        thumbnail_content = self.process_image(source_content)
-        self.name = self.storage.save(self.name, thumbnail_content)
-        
         # Set the thumbnail as an attribute of the source image's ImageFieldFile
         setattr(self.source, self.identifier, self)
+
+        if source_content is None:
+            try:
+                source_content = self.source.get_image_content()
+            except NoAccessToImage:
+                return
+        
+        thumbnail_content = self.process_image(source_content)
+        self.name = self.storage.save(self.name, thumbnail_content)
 
         # Update the filesize cache
         self._size = len(thumbnail_content)
@@ -289,7 +293,10 @@ class BaseEnhancedImageFieldFile(ImageFieldFile):
         
         # Resize the source image if image processing options have been set
         if self.proc_opts is not None:
-            content = self.process_image(content)
+            try:
+                content = self.process_image(content)
+            except NoAccessToImage:
+                pass
             # The following sets the correct filename extension according
             # to the image format. 
             name = self.generate_image_name(name=name)

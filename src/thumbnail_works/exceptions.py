@@ -42,3 +42,6 @@ class ThumbnailWorksError(Exception):
     
     """
     pass
+
+class NoAccessToImage(Exception):
+    pass
