@@ -1,4 +1,3 @@
-django-thumbnail-works
 Django
 PIL
-cropresize
+cropresize2

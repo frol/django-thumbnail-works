@@ -61,10 +61,10 @@ if __name__=='__main__':
         name = 'django-thumbnail-works',
         version = get_version(),
         license = 'Apache License version 2',
-        author = 'George Notaras',
-        author_email = 'gnot [at] g-loaded.eu',
-        maintainer = 'George Notaras',
-        maintainer_email = 'gnot [at] g-loaded.eu',
+        author = 'George Notaras, Vlad Frolov',
+        author_email = 'gnot [at] g-loaded.eu, frolvlad@gmail.com',
+        maintainer = 'George Notaras, Vlad Frolov',
+        maintainer_email = 'gnot [at] g-loaded.eu, frolvlad@gmail.com',
         url = 'http://www.codetrax.org/projects/django-thumbnail-works',
         description = 'django-thumbnail-works adds thumbnail support to the default ImageField.',
         long_description = read('README.rst'),
@@ -86,7 +86,7 @@ if __name__=='__main__':
         package_dir = {'': 'src'},
         packages = ['thumbnail_works'],
         include_package_data = True,
-        #install_requires=read('requirements.txt').splitlines(),
+        install_requires=read('requirements.txt').splitlines(),
         zip_safe = False,
     )
 
