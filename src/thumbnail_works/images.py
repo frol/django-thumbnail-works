@@ -17,8 +17,7 @@ from django.core.files.base import ContentFile
 
 from thumbnail_works import settings
 
-from thumbnail_works.exceptions import ThumbnailOptionError
-from thumbnail_works.exceptions import ThumbnailWorksError
+from thumbnail_works.exceptions import ThumbnailOptionError, ThumbnailWorksError, NoAccessToImage
 from thumbnail_works.utils import get_width_height_from_string
 
 
@@ -138,7 +137,7 @@ class ImageProcessor:
         try:
             content = ContentFile(self.storage.open(self.name).read())
         except IOError:
-            raise Exception('Could not access image data: %s' % self.name)
+            raise NoAccessToImage()
         else:
             return content
     
