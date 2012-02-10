@@ -157,6 +157,7 @@ class ImageProcessor:
             im = im.convert('RGB')
         
         # Process
+        self._fix_orientation(im)
         size = self.proc_opts['size']
         upscale = self.proc_opts['upscale']
         crop = self.proc_opts['crop']
@@ -186,6 +187,33 @@ class ImageProcessor:
         return ContentFile(data)
 
     # Processors
+
+    def _fix_orientation(self, im):
+        """
+        Rotate (and/or flip) the thumbnail to respect the image EXIF orientation
+        data.
+        """
+        try:
+            exif = im._getexif()
+        except AttributeError:
+            exif = None
+        if exif:
+            orientation = exif.get(0x0112)
+            if orientation == 2:
+                im = im.transpose(im.FLIP_LEFT_RIGHT)
+            elif orientation == 3:
+                im = im.rotate(180)
+            elif orientation == 4:
+                im = im.transpose(im.FLIP_TOP_BOTTOM)
+            elif orientation == 5:
+                im = im.rotate(-90).transpose(im.FLIP_LEFT_RIGHT)
+            elif orientation == 6:
+                im = im.rotate(-90)
+            elif orientation == 7:
+                im = im.rotate(90).transpose(im.FLIP_LEFT_RIGHT)
+            elif orientation == 8:
+                im = im.rotate(90)
+        return im
     
     def _resize(self, im, size, upscale, crop_mode):
         return crop_resize(im, size, exact_size=upscale, crop_mode=crop_mode)
