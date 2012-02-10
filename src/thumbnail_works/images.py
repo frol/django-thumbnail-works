@@ -157,7 +157,7 @@ class ImageProcessor:
             im = im.convert('RGB')
         
         # Process
-        self._fix_orientation(im)
+        im = self._fix_orientation(im)
         size = self.proc_opts['size']
         upscale = self.proc_opts['upscale']
         crop = self.proc_opts['crop']
